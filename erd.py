@@ -178,7 +178,7 @@ if __name__ == "__main__":
         with open(DBML_OUTPUT_FILE, 'w', encoding='utf-8') as f:
             f.write(dbml_content)
         print(f"DBML diagram code successfully saved to '{DBML_OUTPUT_FILE}'")
-        print("  -> You can now copy the content of this file and paste it into https://dbdiagram.io/d")
+        
 
         # 5. (Optional) Recreate the database from the JSON file
         # Uncomment the line below to run this functionality.
