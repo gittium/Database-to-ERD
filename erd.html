@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive DBML to ERD Converter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗂️ Interactive DBML to ERD Converter</h1>
+            <p>Professional Database Visualization with UML Relationship Symbols</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="input-section">
+                <div class="section-header">
+                    <span>📝 DBML Input</span>
+                    <div>
+                        
+                        <button class="btn btn-primary" onclick="convertToERD()">Convert</button>
+                        <button class="btn btn-secondary" onclick="clearInput()">Clear</button>
+                    </div>
+                </div>
+                <textarea id="dbmlInput" placeholder="Enter your DBML code here...
+
+Example:
+Table users {
+  id integer [primary key]
+  name varchar(100)
+}
+
+Table posts {
+  id integer [primary key]
+  user_id integer
+}
+
+Ref: posts.user_id > users.id"></textarea>
+                <div class="stats" id="inputStats">
+                    <div style="display: flex; gap: 20px;">
+                        <div class="stats-item">
+                            <div class="stats-icon" style="background: #3498db;">📄</div>
+                            <span>Lines: <strong>0</strong></span>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-icon" style="background: #2ecc71;">🗂️</div>
+                            <span>Tables: <strong>0</strong></span>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-icon" style="background: #e74c3c;">🔗</div>
+                            <span>Relations: <strong>0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="output-section">
+                <div class="section-header">
+                    <span>📊 Interactive ERD</span>
+                    <div>
+                        <button class="btn btn-secondary" onclick="autoLayout()">Auto Layout</button>
+                        <button class="btn btn-secondary" onclick="exportSVG()">Export SVG</button>
+                    </div>
+                </div>
+                <div class="output-container">
+                    <div class="controls">
+                        <button class="control-btn" onclick="zoomIn()" title="Zoom In">+</button>
+                        <button class="control-btn" onclick="zoomOut()" title="Zoom Out">−</button>
+                        <button class="control-btn" onclick="resetZoom()" title="Reset View">⌂</button>
+                        <button class="control-btn" onclick="fitToView()" title="Fit to View">⤢</button>
+                    </div>
+                    <svg id="erdDiagram">
+                        <defs>
+                            <!-- One-to-One markers -->
+                            <marker id="one-to-one-start" markerWidth="15" markerHeight="12" refX="0" refY="6" orient="auto">
+                                <line x1="0" y1="0" x2="0" y2="12" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            <marker id="one-to-one-end" markerWidth="15" markerHeight="12" refX="15" refY="6" orient="auto">
+                                <line x1="15" y1="0" x2="15" y2="12" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            
+                            <!-- One-to-Many markers -->
+                            <marker id="one-marker" markerWidth="15" markerHeight="12" refX="0" refY="6" orient="auto">
+                                <line x1="0" y1="0" x2="0" y2="12" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            <marker id="many-marker" markerWidth="20" markerHeight="12" refX="20" refY="6" orient="auto">
+                                <path d="M20,6 L8,0 L8,12 Z" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            
+                            <!-- Many-to-One markers -->
+                            <marker id="many-start" markerWidth="20" markerHeight="12" refX="0" refY="6" orient="auto">  
+                                <path d="M0,6 L12,0 L12,12 Z" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            <marker id="one-end" markerWidth="15" markerHeight="12" refX="15" refY="6" orient="auto">
+                                <line x1="15" y1="0" x2="15" y2="12" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            
+                            <!-- Many-to-Many markers -->
+                            <marker id="many-to-many-start" markerWidth="20" markerHeight="12" refX="0" refY="6" orient="auto">
+                                <path d="M0,6 L12,0 L12,12 Z" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                            <marker id="many-to-many-end" markerWidth="20" markerHeight="12" refX="20" refY="6" orient="auto">
+                                <path d="M20,6 L8,0 L8,12 Z" fill="none" stroke="#2c3e50" stroke-width="2"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="zoom-level" id="zoomLevel">100%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Relationship Legend -->
+        <div class="legend">
+            <h3>Relationship Symbols</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <svg width="120" height="30">
+                        <line x1="10" y1="15" x2="110" y2="15" stroke="#2c3e50" stroke-width="2" 
+                              marker-start="url(#one-marker)" marker-end="url(#many-marker)"/>
+                    </svg>
+                    <span>One-to-Many (>)</span>
+                </div>
+                <div class="legend-item">
+                    <svg width="120" height="30">
+                        <line x1="10" y1="15" x2="110" y2="15" stroke="#2c3e50" stroke-width="2" 
+                              marker-start="url(#many-marker-start)" marker-end="url(#one-marker)"/>
+                    </svg>
+                    <span>Many-to-One (<)</span>
+                </div>
+                <div class="legend-item">
+                    <svg width="120" height="30">
+                        <line x1="10" y1="15" x2="110" y2="15" stroke="#2c3e50" stroke-width="2" 
+                              marker-start="url(#one-marker)" marker-end="url(#one-marker)"/>
+                    </svg>
+                    <span>One-to-One (-)</span>
+                </div>
+                <div class="legend-item">
+                    <svg width="120" height="30">
+                        <line x1="10" y1="15" x2="110" y2="15" stroke="#2c3e50" stroke-width="2" 
+                              marker-start="url(#many-marker-start)" marker-end="url(#many-marker)"/>
+                    </svg>
+                    <span>Many-to-Many (<>)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
