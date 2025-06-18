@@ -1,0 +1,494 @@
+{
+    "schemas": {
+        "company": {
+            "tables": {
+                "employees": {
+                    "columns": [
+                        {
+                            "name": "employee_id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('company.employees_employee_id_seq'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "first_name",
+                            "type": "VARCHAR(50)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "last_name",
+                            "type": "VARCHAR(50)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "department_id",
+                            "type": "INTEGER",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "hire_date",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "salary",
+                            "type": "NUMERIC(10, 2)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "employee_id"
+                    ],
+                    "foreign_keys": [
+                        {
+                            "name": "fk_department",
+                            "constrained_columns": [
+                                "department_id"
+                            ],
+                            "referred_schema": "company",
+                            "referred_table": "departments",
+                            "referred_columns": [
+                                "department_id"
+                            ],
+                            "options": {}
+                        }
+                    ],
+                    "unique_constraints": [],
+                    "indexes": []
+                },
+                "assignments": {
+                    "columns": [
+                        {
+                            "name": "assignment_id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('company.assignments_assignment_id_seq'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "employee_id",
+                            "type": "INTEGER",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "project_id",
+                            "type": "INTEGER",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "assigned_date",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "assignment_id"
+                    ],
+                    "foreign_keys": [
+                        {
+                            "name": "assignments_employee_id_fkey",
+                            "constrained_columns": [
+                                "employee_id"
+                            ],
+                            "referred_schema": "company",
+                            "referred_table": "employees",
+                            "referred_columns": [
+                                "employee_id"
+                            ],
+                            "options": {}
+                        },
+                        {
+                            "name": "assignments_project_id_fkey",
+                            "constrained_columns": [
+                                "project_id"
+                            ],
+                            "referred_schema": "company",
+                            "referred_table": "projects",
+                            "referred_columns": [
+                                "project_id"
+                            ],
+                            "options": {}
+                        }
+                    ],
+                    "unique_constraints": [],
+                    "indexes": []
+                },
+                "projects": {
+                    "columns": [
+                        {
+                            "name": "project_id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('company.projects_project_id_seq'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "project_name",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "start_date",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "end_date",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "project_id"
+                    ],
+                    "foreign_keys": [],
+                    "unique_constraints": [],
+                    "indexes": []
+                },
+                "departments": {
+                    "columns": [
+                        {
+                            "name": "department_id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('company.departments_department_id_seq'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "department_name",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "location",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "department_id"
+                    ],
+                    "foreign_keys": [],
+                    "unique_constraints": [],
+                    "indexes": []
+                }
+            },
+            "views": {}
+        },
+        "public": {
+            "tables": {
+                "disease": {
+                    "columns": [
+                        {
+                            "name": "id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('\"public\".\"โรคประจำตัว_id_seq\"'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "name",
+                            "type": "VARCHAR(100)",
+                            "nullable": false,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "sub_disease_id",
+                            "type": "INTEGER",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "id"
+                    ],
+                    "foreign_keys": [
+                        {
+                            "name": "fk_sub_disease_id",
+                            "constrained_columns": [
+                                "sub_disease_id"
+                            ],
+                            "referred_schema": "public",
+                            "referred_table": "sub_disease",
+                            "referred_columns": [
+                                "id"
+                            ],
+                            "options": {}
+                        }
+                    ],
+                    "unique_constraints": [
+                        {
+                            "name": "โรคประจำตัว_name_key",
+                            "column_names": [
+                                "name"
+                            ]
+                        }
+                    ],
+                    "indexes": [
+                        {
+                            "name": "โรคประจำตัว_name_key",
+                            "unique": true,
+                            "column_names": [
+                                "name"
+                            ],
+                            "include_columns": [],
+                            "duplicates_constraint": "โรคประจำตัว_name_key",
+                            "dialect_options": {
+                                "postgresql_include": []
+                            }
+                        }
+                    ]
+                },
+                "sub_disease": {
+                    "columns": [
+                        {
+                            "name": "id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('\"public\".sub_disease_id_seq'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "sub_disease_name",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "id"
+                    ],
+                    "foreign_keys": [],
+                    "unique_constraints": [],
+                    "indexes": []
+                },
+                "patient": {
+                    "columns": [
+                        {
+                            "name": "รหัสผู้ป่วย",
+                            "type": "VARCHAR(20)",
+                            "nullable": false,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "ชื่อนามสกุล",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "รหัสบัตรประชาชน",
+                            "type": "VARCHAR(13)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "วันเกิด",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "เพศ",
+                            "type": "VARCHAR(10)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "เบอร์โทรศัพท์",
+                            "type": "VARCHAR(20)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "อีเมล",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "ที่อยู่",
+                            "type": "TEXT",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "โรคประจำตัว",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "เลขกรมธรรม์",
+                            "type": "VARCHAR(50)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "วันที่เข้ารักษา",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "วันที่จำหน่าย",
+                            "type": "DATE",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "disease_id",
+                            "type": "INTEGER",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        },
+                        {
+                            "name": "hospital_id",
+                            "type": "INTEGER",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "รหัสผู้ป่วย"
+                    ],
+                    "foreign_keys": [
+                        {
+                            "name": "fk_disease",
+                            "constrained_columns": [
+                                "disease_id"
+                            ],
+                            "referred_schema": "public",
+                            "referred_table": "disease",
+                            "referred_columns": [
+                                "id"
+                            ],
+                            "options": {}
+                        },
+                        {
+                            "name": "fk_hospital_id",
+                            "constrained_columns": [
+                                "hospital_id"
+                            ],
+                            "referred_schema": "public",
+                            "referred_table": "hospital",
+                            "referred_columns": [
+                                "id"
+                            ],
+                            "options": {}
+                        }
+                    ],
+                    "unique_constraints": [],
+                    "indexes": []
+                },
+                "hospital": {
+                    "columns": [
+                        {
+                            "name": "id",
+                            "type": "INTEGER",
+                            "nullable": false,
+                            "default": "nextval('\"public\".hospital_id_seq'::regclass)",
+                            "autoincrement": true,
+                            "comment": null
+                        },
+                        {
+                            "name": "hospital_name",
+                            "type": "VARCHAR(100)",
+                            "nullable": true,
+                            "default": null,
+                            "autoincrement": false,
+                            "comment": null
+                        }
+                    ],
+                    "primary_key": [
+                        "id"
+                    ],
+                    "foreign_keys": [],
+                    "unique_constraints": [],
+                    "indexes": []
+                }
+            },
+            "views": {}
+        }
+    }
+}

@@ -1,0 +1,69 @@
+Table company.employees {
+  employee_id INTEGER [pk, not null, increment]
+  first_name VARCHAR(50) 
+  last_name VARCHAR(50) 
+  department_id INTEGER 
+  hire_date DATE 
+  salary NUMERIC(10, 2) 
+}
+
+Table company.assignments {
+  assignment_id INTEGER [pk, not null, increment]
+  employee_id INTEGER 
+  project_id INTEGER 
+  assigned_date DATE 
+}
+
+Table company.projects {
+  project_id INTEGER [pk, not null, increment]
+  project_name VARCHAR(100) 
+  start_date DATE 
+  end_date DATE 
+}
+
+Table company.departments {
+  department_id INTEGER [pk, not null, increment]
+  department_name VARCHAR(100) 
+  location VARCHAR(100) 
+}
+
+Table public.disease {
+  id INTEGER [pk, not null, increment]
+  name VARCHAR(100) [not null]
+  sub_disease_id INTEGER 
+}
+
+Table public.sub_disease {
+  id INTEGER [pk, not null, increment]
+  sub_disease_name VARCHAR(100) 
+}
+
+Table public.patient {
+  รหัสผู้ป่วย VARCHAR(20) [pk, not null]
+  ชื่อนามสกุล VARCHAR(100) 
+  รหัสบัตรประชาชน VARCHAR(13) 
+  วันเกิด DATE 
+  เพศ VARCHAR(10) 
+  เบอร์โทรศัพท์ VARCHAR(20) 
+  อีเมล VARCHAR(100) 
+  ที่อยู่ TEXT 
+  โรคประจำตัว VARCHAR(100) 
+  เลขกรมธรรม์ VARCHAR(50) 
+  วันที่เข้ารักษา DATE 
+  วันที่จำหน่าย DATE 
+  disease_id INTEGER 
+  hospital_id INTEGER 
+}
+
+Table public.hospital {
+  id INTEGER [pk, not null, increment]
+  hospital_name VARCHAR(100) 
+}
+
+// --- Relationships ---
+Ref: company.employees.department_id < company.departments.department_id
+Ref: company.assignments.employee_id < company.employees.employee_id
+Ref: company.assignments.project_id < company.projects.project_id
+Ref: public.disease.sub_disease_id < public.sub_disease.id
+Ref: public.patient.disease_id < public.disease.id
+Ref: public.patient.hospital_id < public.hospital.id
